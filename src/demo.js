@@ -15,80 +15,12 @@ import Typography from "@material-ui/core/Typography";
 import StepIcon from "@material-ui/core/StepIcon";
 import StepContent from "@material-ui/core/StepContent";
 
-const QontoConnector = withStyles({
-  alternativeLabel: {
-    top: 10,
-    left: "calc(-50% + 16px)",
-    right: "calc(50% + 16px)"
-  },
-  active: {
-    "& $line": {
-      borderColor: "#784af4"
-    }
-  },
-  completed: {
-    "& $line": {
-      borderColor: "#784af4"
-    }
-  },
-  line: {
-    borderColor: "#eaeaf0",
-    borderTopWidth: 3,
-    borderRadius: 1
-  }
-})(StepConnector);
-
-const useQontoStepIconStyles = makeStyles({
-  root: {
-    color: "#eaeaf0",
-    display: "flex",
-    height: 22,
-    alignItems: "center"
-  },
-  active: {
-    color: "#784af4"
-  },
-  circle: {
-    width: 8,
-    height: 8,
-    borderRadius: "50%",
-    backgroundColor: "currentColor"
-  },
-  completed: {
-    color: "#784af4",
-    zIndex: 1,
-    fontSize: 18
-  }
-});
-
-function QontoStepIcon(props) {
-  const classes = useQontoStepIconStyles();
-  const { active, completed } = props;
-
-  return (
-    <div
-      className={clsx(classes.root, {
-        [classes.active]: active
-      })}
-    >
-      {completed ? (
-        <Check className={classes.completed} />
-      ) : (
-        <div className={classes.circle} />
-      )}
-    </div>
-  );
-}
-
-QontoStepIcon.propTypes = {
-  active: PropTypes.bool,
-  completed: PropTypes.bool
-};
-
 const ColorlibConnector = withStyles({
   alternativeLabel: {
-    top: 70,
-    zIndex: 1
+    top: 122,
+    zIndex: 1,
+    left: "-50% ",
+    right: "50% "
   },
   active: {
     "& $line": {
@@ -107,64 +39,19 @@ const ColorlibConnector = withStyles({
     border: 0,
     backgroundColor: "#1e88e5",
     borderRadius: 1,
-    zIndex: 1
+    zIndex: 1,
+    maxWidth: 100
   }
 })(StepConnector);
 
-const useColorlibStepIconStyles = makeStyles({
-  root: {
-    backgroundColor: "#ccc",
-    zIndex: 1,
-    color: "#fff",
-    width: 50,
-    height: 50,
-    display: "flex",
-    borderRadius: "50%",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  active: {
-    backgroundImage:
-      "linear-gradient( 136deg, #1e88e5 0%, rgb(233,64,87) 50%, #1e88e5 100%)",
-    boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)"
-  },
-  completed: {
-    backgroundImage:
-      "linear-gradient( 136deg, #1e88e5 0%, rgb(233,64,87) 50%, #1e88e5 100%)"
-  }
-});
-
-function ColorlibStepIcon(props) {
-  const classes = useColorlibStepIconStyles();
-  const { active, completed } = props;
-
-  const icons = {
-    1: <SettingsIcon />,
-    2: <GroupAddIcon />,
-    3: <VideoLabelIcon />
-  };
-
-  return (
-    <div
-      className={clsx(classes.root, {
-        [classes.active]: active,
-        [classes.completed]: completed
-      })}
-    >
-      {icons[String(props.icon)]}
-    </div>
-  );
-}
-
-ColorlibStepIcon.propTypes = {
-  active: PropTypes.bool,
-  completed: PropTypes.bool,
-  icon: PropTypes.node
-};
-
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "90%"
+    width: "200px",
+    backgroundColor: "#00F",
+    "& .MuiStepLabel-labelContainer": {
+      height: "3rem",
+      overflow: "hidden"
+    }
   },
   button: {
     marginRight: theme.spacing(1)
@@ -177,29 +64,46 @@ const useStyles = makeStyles(theme => ({
 
 function getSteps() {
   return [
-    "Select campaign settings",
-    "Select campaign settings",
-    "Select campaign settings",
-    "Select campaign settings",
-    "Create an ad group",
-    "Create an ad"
+    "Pre Production",
+    "Approved/pending approval",
+    "In Production",
+    "Waiting Shipment",
+    "Waiting Shipment",
+    "post production"
   ];
 }
 
 const SVGElement = props => (
-  <svg style={{ position: "relative", zIndex: 99999 }}>
+  <svg
+    style={{
+      position: "relative",
+      zIndex: 2,
+      maxWidth: "110px",
+      MaxHeight: "110px"
+    }}
+  >
     <g id="UrTavla">
-      <circle style={{ fill: "#1e88e5" }} cx="50%" cy="50%" r={props.value} />
-      <circle style={{ fill: "#000" }} cx="50%" cy="50%" r="10%" />
+      <circle
+        style={{ fill: "#1e88e5" }}
+        cx="50%"
+        cy="50%"
+        r={`${props.value / 2}%`}
+      />
+      <circle
+        style={{ fill: "#000" }}
+        cx="50%"
+        cy="50%"
+        r="1.5rem"
+        stroke="0"
+      />
       <text
         x="50%"
-        y="52%"
-        text-anchor="middle"
-        style={{ fontSize: "12px", fill: "#FFF" }}
+        y="55%"
+        textAnchor="middle"
+        style={{ fontSize: "1rem", fill: "#FFF", fontWeight: "normal" }}
       >
         {props.label || 0}
       </text>{" "}
-      q
     </g>
   </svg>
 );
@@ -241,15 +145,17 @@ export default function CustomizedSteppers() {
         connector={<ColorlibConnector />}
       >
         {steps.map(label => {
-          const randomValue = Math.random() * 70;
+          const randomValue = Math.random() * 100;
           return (
-            <Step key={label}>
+            <Step key={label} completed={false}>
+              <div>
+                <StepLabel>{label}</StepLabel>
+              </div>
               <SVGElement
                 label={`${parseInt(randomValue)}`}
                 value={`${randomValue}`}
                 style={{ Width: "500px" }}
               />
-              <StepLabel>{label}</StepLabel>
             </Step>
           );
         })}
